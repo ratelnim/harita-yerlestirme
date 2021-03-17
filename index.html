@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Transpilantasyon Haritası Projesi</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .marker {
+            background-image: url('/assets/location+maker+map+icon.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mapboxgl-popup {
+            max-width: 200px;
+        }
+
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id='map'></div>
+
+    <script>
+        // Mapbox Ulaşım Anahtarımız
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoicmF0ZWxuaW0iLCJhIjoiY2ttZGtsZHcxMm1hYjJ4anh1bTJmenY1eCJ9.tA-XWW0MS50K4G_AKJktAA';
+
+        // Haritayı yerine yerleştiren kısım
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [36, 39],
+            zoom: 5.4
+        });
+
+        // Buraya Konum Bilgileri Gelecek
+
+        var geojson = {
+            type: 'FeatureCollection',
+            features: [
+
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [28.971924394963143, 41.0301666189114]
+                    },
+                    properties: {
+                        title: 'Galata Kulesi',
+                        description: 'İstanbulun göbeğinden bir dehşet manzara',
+                        image: "https://uted.org/r/952/istanbul’da-bin-500-yıllık-görkemli-bir-eser-galata-kulesi.jpg"
+                    }
+                },
+
+                {
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [35.44702977657762, 38.53245594244322]
+                    },
+                    properties: {
+                        title: 'Erciyes Dağı',
+                        description: 'Dünyanın En Önemli Dağı',
+                        image:
+                        "https://cdn1.ntv.com.tr/gorsel/EiY_huFGEUCeOZ9RuERr_g.jpg?width=1000&mode=crop&scale=both"
+                    }
+                }
+            ]
+        };
+
+        // haritaya marker ekliyoruz
+        geojson.features.forEach(function (marker) {
+
+                    var el = document.createElement('div');
+                    el.className = 'marker';
+
+                    new mapboxgl.Marker(el)
+                        .setLngLat(marker.geometry.coordinates)
+                        .setPopup(new mapboxgl.Popup({
+                                offset: 25
+                            }) // pop-up ekliyoruz.
+                            .setHTML('<img width= "100" src="' + marker.properties.image  +'" alt=' + marker.properties.title + '>' + '<h3>' + marker.properties.title + 
+                                '</h3> <p>' + marker.properties.description + '</p>'))
+                                .addTo(map);
+                            });
+    </script>
+
+</body>
+
+</html>
